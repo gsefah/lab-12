@@ -61,19 +61,22 @@ public class DrawPanel extends JPanel
             // Remember this starting coordinate (look at documentation for mouse events)
             // You can store these in x0 and y0
             // TODO
+        	x0 = e.getX();
+        	y0 = e.getY();
 
             // are we in edit mode?
             if (frame.isEditing())
             {
                 // create point where the mouse was clicked
                 // TODO
+            	Point point = new Point(x0, y0);
 
                 // find which shape was clicked
                 // loop through shapes in stack fashion, LIFO
                 // TODO
-                for (// TODO: loop through shape list)
+                for (int i = 0; i < shapeList.size(); ++i) // TODO: loop through shape list
                 {
-                    if (// TODO: check if point in shape)
+                    if (shapeList.get(i).contains(point)) // TODO: check if point in shape
                     {
                         // if the shape contains the point, set the shapeIndex
                         // to be the index in the shapeList
@@ -96,6 +99,7 @@ public class DrawPanel extends JPanel
                 
                 // find which shape was clicked
                 // loop through shapes in stack fashion, LIFO
+            
                 for (//TODO)
                 {
                     if (//TODO)
@@ -329,4 +333,3 @@ public class DrawPanel extends JPanel
         return shapeIndex;
     }
 
-}
