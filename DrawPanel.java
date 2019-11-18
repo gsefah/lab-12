@@ -76,7 +76,7 @@ public class DrawPanel extends JPanel
                 // TODO
                 for (int i = 0; i < shapeList.size(); ++i) // TODO: loop through shape list
                 {
-                    if (shapeList.get(i).contains(point)) // TODO: check if point in shape
+                    if (shapeList.get(i).contains(point)) // TODO: check if point in shape.
                     {
                         // if the shape contains the point, set the shapeIndex
                         // to be the index in the shapeList
@@ -84,25 +84,31 @@ public class DrawPanel extends JPanel
 
                         // TODO: find if the shape is filled
                         // TODO: set fillBox to match the status of the shape
+                        if (shapeList.get(shapeIndex).isFilled()) {
+                        	shapeList.get(shapeIndex).setFilled(true);
+                        }
+                        
 
                         // TODO: get color of the shape
                         // TODO: set the color of the frame to match the shape's color
+                        shapeList.get(shapeIndex).getColor();
+                        frame.controlPanel.setColor(shapeList.get(shapeIndex).getColor());
                         
                         // TODO: break out of the for loop
-                        
+                        break;
                     }
                 }
             }
             else if (frame.isDeleting()) // are we in delete mode?
             {
                 // TODO: create point where the mouse was clicked
+            	Point point2 = new Point(x0, y0);
                 
                 // find which shape was clicked
                 // loop through shapes in stack fashion, LIFO
-            
-                for (//TODO)
+                for (int i = 0; i < shapeList.size(); ++i)
                 {
-                    if (//TODO)
+                    if (shapeList.get(i).contains(point2))
                     {
                         // If the shape contains the point, prompt the user for
                         // a confirmation to delete
@@ -113,14 +119,19 @@ public class DrawPanel extends JPanel
                                         JOptionPane.YES_NO_OPTION);
                         // TODO: Check answer, remove shape if yes 
                         // You may need to review JOptionPane documentation
+                        if (ret == JOptionPane.YES_OPTION) {
+                        	shapeList.remove(i);
+                        }
 
                         // TODO: break out of for loop
+                        break;
                     }
                 }
             }
             else // we're drawing a shape
             {
                 // TODO: Indicate that drawing of a shape has begun (look at what flags may be set)
+            	drawingFlag = true;
             }
         }
 
@@ -139,18 +150,28 @@ public class DrawPanel extends JPanel
 
                 // Coordinates of the cursor (x0/y0 are already being used, what should you use?)
                 // TODO
+            	x1 = e.getX();
+            	y1 = e.getY(); 
 
                 // Indicate that we are no longer drawing
                 // TODO
-
+            	drawingFlag = false;
+            	
                 // We no longer need a temporary shape (set to null)
                 // TODO
+            	tempShape = null;
 
                 // Create the shape given the current state
                 // TODO
+            	Shape currShape = createShape();
+            	
 
                 // Add the shape to the panel list if the shape exists
                 // TODO
+            	if (currShape != null) {
+            		DrawPanel.this.addShape(currShape);	
+            	}
+            	
                 
                 //repaint
                 repaint();
@@ -173,9 +194,13 @@ public class DrawPanel extends JPanel
                 // Yes
                 // Note the current coordinates
                 // TODO
+            	x1 = e.getX();
+            	y1 = e.getY(); 
 
                 // Create a temporary shape (look at what variables we have)
                 // TODO
+            	tempShape = createShape();
+            	
 
                 // repaint
                 repaint();
@@ -198,24 +223,30 @@ public class DrawPanel extends JPanel
 
             // Create a new object, depending on what is selected
             // TODO give them diamond, comments else
+            Point point = new Point(x0, y0);
             if (frame.isOval())
             {
                 // TODO: create and return an Oval
+            	
+            	Oval oval = new Oval(point, width, height, frame.getColor(), frame.isFilled());
                 
             }
             else if (frame.isRectangle())
             {
                 // TODO: create and return a Rectangle
+            	Rectangle rectangle = new Rectangle(point, width, height, frame.getColor(), frame.isFilled());
                 
             }
             else if (frame.isTriangle())
             {
                 // TODO: create and return a Triangle
+            	RightTriangle triangle = new RightTriangle(point, xdist, ydist, frame.getColor(), frame.isFilled());
                 
             }
             else if (frame.isDiamond())
             {
                 // TODO: create and return diamond
+            	 Diamond diamond = new Diamond(point, width, height, frame.getColor(), frame.isFilled());
                 
             }
             // Should not get here, but be safe
@@ -274,9 +305,12 @@ public class DrawPanel extends JPanel
         super.paintComponent(g);
 
         // TODO: Draw each shape on the list
+        for (int i = 0; i < shapeList.size(); ++i) {
+        	shapeList.get(i).draw(g);
+        }
         
         // TODO: If there is a temporary shape, then draw it, too
-        
+        tempShape.draw(g);
     }
 
     /**
@@ -332,4 +366,5 @@ public class DrawPanel extends JPanel
     {
         return shapeIndex;
     }
+}
 
